@@ -14,15 +14,25 @@ export function FilterBar({ filters, onFilterChange }: FilterBarProps) {
     value: string | number
   ) => {
     const newFilters = { ...filters };
-    const filterSet = new Set(newFilters[type]);
 
-    if (filterSet.has(value as never)) {
-      filterSet.delete(value as never);
-    } else {
-      filterSet.add(value as never);
+    if (type === 'categories' || type === 'scopes') {
+      const filterSet = new Set(newFilters[type] as Set<string>);
+      if (filterSet.has(value as string)) {
+        filterSet.delete(value as string);
+      } else {
+        filterSet.add(value as string);
+      }
+      newFilters[type] = filterSet;
+    } else if (type === 'years') {
+      const filterSet = new Set(newFilters[type] as Set<number>);
+      if (filterSet.has(value as number)) {
+        filterSet.delete(value as number);
+      } else {
+        filterSet.add(value as number);
+      }
+      newFilters[type] = filterSet;
     }
 
-    newFilters[type] = filterSet as any;
     onFilterChange(newFilters);
   };
 

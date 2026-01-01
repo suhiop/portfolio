@@ -1,14 +1,15 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useEffect, use } from 'react';
 import { motion } from 'framer-motion';
 import { ModalContent } from '@/components/modal/ModalContent';
 import { getProjectById } from '@/lib/data/projects';
 
-export default function ProjectModal({ params }: { params: { id: string } }) {
+export default function ProjectModal({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
-  const project = getProjectById(params.id);
+  const { id } = use(params);
+  const project = getProjectById(id);
 
   useEffect(() => {
     // ESC key handler
